@@ -86,7 +86,6 @@ This repository includes several pre-rendered visual milestones showing progress
 
 ### 🌌 Final Scene (Chapter 14)
 *Defocus blur, 1200x675, 500 samples per pixel, BVH node hierarchy.*
-*(Note: The raw PPM file was partially truncated; this preview displays the recovered portion).*
 
 ![Final Scene](renders/14_final_scene/final_scene.png)
 
@@ -132,15 +131,15 @@ Comparison of dielectric glass spheres.
 
 ### 🟤 Diffuse Materials (Chapter 9)
 Reorganization of diffuse materials rendering milestones.
-- **First Diffusion**: First render of a diffuse sphere with hemispherical scattering.
-- **Shadow Acne**: Visualization of self-shadowing artifacts caused by floating-point rounding errors.
+- **First Diffusion**: First render of a diffuse sphere with hemispherical scattering (showing shadow acne).
+- **Shadow Acne Fix**: Resolving the self-shadowing artifacts by ignoring intersections close to zero.
 - **Lambertian Reflection**: True Lambertian reflection using cosine-weighted hemispherical distribution.
 
-#### First Diffusion
+#### First Diffusion (with Shadow Acne)
 ![First Diffusion](renders/09_diffuse_materials/01_first_diffusion/first_diffuse.png)
 
-#### Shadow Acne
-![Shadow Acne](renders/09_diffuse_materials/02_shadow_acne/shadow_acne.png)
+#### Shadow Acne Fix
+![Shadow Acne Fix](renders/09_diffuse_materials/02_shadow_acne/shadow_acne.png)
 
 #### Lambertian Reflection
 ![Lambertian Reflection](renders/09_diffuse_materials/03_lambertian/lambertian_reflection.png)
@@ -152,19 +151,9 @@ Reorganization of diffuse materials rendering milestones.
 
 ---
 
-## 🔄 PPM to PNG Image Converter
+## 🖼️ Viewing PPM Files
 
-Since browsers and GitHub cannot natively display `.ppm` (Portable Pixmap) files, this repository includes a helper Python utility, [convert_ppm.py](file:///c:/Users/kondr/Desktop/ray_tracing/Week-2/convert_ppm.py).
+Since web browsers and standard OS image viewers cannot natively display `.ppm` (Portable Pixmap) files, you can view the raw `.ppm` files in this repository using:
 
-This script:
-1. Automatically scans the entire `renders/` directory and its subfolders for `.ppm` files.
-2. Converts them into standard `.png` images in their respective subdirectories.
-3. Automatically attempts to recover and pad truncated or interrupted renders (like `final_scene.ppm`) with black pixels so they can still be viewed.
-4. Skips redundant conversions if the PNG file is already up to date.
-
-### Usage
-Ensure you have the Python `Pillow` library installed (`pip install Pillow`), then execute:
-
-```bash
-python convert_ppm.py
-```
+1. **IrfanView**: A very fast, lightweight, and free image viewer for Windows that natively supports `.ppm` files out of the box (highly recommended).
+2. **GIMP or Photoshop**: Popular graphics editors that fully support importing and exporting PPM images.

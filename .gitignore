@@ -27,3 +27,6 @@ cmake-build-release/
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Executables and builds
+bin/

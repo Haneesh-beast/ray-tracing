@@ -42,13 +42,14 @@ A high-performance, header-only CPU Ray Tracer written in C++ based on Peter Shi
 │   ├── 06_surface_normals_multiple_objects/ # Normal vector coloring and multiple objects (sphere on grass)
 │   ├── 08_antialiasing/                 # Supersampled antialiased sphere
 │   ├── 09_diffuse_materials/            # Diffuse materials
-│   │   ├── shadow_acne/                # Before/after shadow acne fix comparison
-│   │   └── lambertian/                 # True Lambertian reflection rendering
+│   │   ├── 01_first_diffusion/         # First diffuse sphere render (no shadow acne)
+│   │   ├── 02_shadow_acne/             # Diffuse sphere with shadow acne
+│   │   └── 03_lambertian/              # True Lambertian reflection rendering
 │   ├── 10_metal/                        # Metal reflection (before/after fuzziness)
 │   ├── 11_dielectrics/                  # Glass dielectrics
-│   │   ├── refraction/                 # Light refraction
-│   │   ├── total_internal_reflection/  # Total Internal Reflection (TIR)
-│   │   └── hollow_glass_sphere/        # Hollow glass bubble primitive
+│   │   ├── 01_refraction/              # Light refraction
+│   │   ├── 02_total_internal_reflection/ # Total Internal Reflection (TIR)
+│   │   └── 03_hollow_glass_sphere/     # Hollow glass bubble primitive
 │   ├── 12_positionable_camera/          # Positionable camera views (wide fov, custom position, zoom)
 │   ├── 13_defocus_blur/                 # Depth of field (defocus blur)
 │   └── 14_final_scene/                  # Final complex scene render
@@ -94,6 +95,18 @@ This repository includes several pre-rendered visual milestones showing progress
 
 ![Defocus Blur](renders/13_defocus_blur/defocus_blur.png)
 
+### 📸 Positionable Camera (Chapter 12)
+Configuring the camera with custom field of view (vfov) and looking positions.
+- **Wide FOV**: Rendering with wide angle 90-degree field of view.
+- **Positioned Camera**: Looking at the spheres from an angle.
+- **Zoomed Camera**: Zooming into the scene with a narrower field of view (20 degrees).
+
+<p align="center">
+  <img src="renders/12_positionable_camera/01_wide_fov.png" width="32%" alt="Wide FOV" />
+  <img src="renders/12_positionable_camera/02_positioned_camera.png" width="32%" alt="Positioned Camera" />
+  <img src="renders/12_positionable_camera/03_positioned_camera_zoomed.png" width="32%" alt="Zoomed Camera" />
+</p>
+
 ### 💎 Glass Materials (Chapter 11 - Dielectrics)
 Comparison of dielectric glass spheres.
 - **Glass Refraction**: Refraction of light using Snell's Law.
@@ -101,21 +114,36 @@ Comparison of dielectric glass spheres.
 - **Hollow Glass Sphere**: A hollow bubble nested inside another dielectric sphere.
 
 #### Glass Refraction
-![Glass Refraction](renders/11_dielectrics/refraction/glass_refraction.png)
+![Glass Refraction](renders/11_dielectrics/01_refraction/glass_refraction.png)
 
 #### Total Internal Reflection (TIR)
-![Total Internal Reflection](renders/11_dielectrics/total_internal_reflection/after_TIR.png)
+![Total Internal Reflection](renders/11_dielectrics/02_total_internal_reflection/total_internal_reflection.png)
 
 #### Hollow Glass Sphere
-![Hollow Glass Sphere](renders/11_dielectrics/hollow_glass_sphere/hollow_glass_sphere.png)
+![Hollow Glass Sphere](renders/11_dielectrics/03_hollow_glass_sphere/hollow_glass_sphere.png)
 
 ### 🪙 Metal Spheres & Surface Roughness (Chapter 10 - Metal)
 *Metallic reflections showing the progress from pure specular reflection (Before Fuzz) to fuzzed specular reflection (After Fuzz).*
 
 <p align="center">
-  <img src="renders/10_metal/before_fuzz.png" width="48%" alt="Before Fuzz (Pure specular)" />
-  <img src="renders/10_metal/after_fuzz.png" width="48%" alt="After Fuzz (Fuzzy reflection)" />
+  <img src="renders/10_metal/01_before_fuzz.png" width="48%" alt="Before Fuzz (Pure specular)" />
+  <img src="renders/10_metal/02_after_fuzz.png" width="48%" alt="After Fuzz (Fuzzy reflection)" />
 </p>
+
+### 🟤 Diffuse Materials (Chapter 9)
+Reorganization of diffuse materials rendering milestones.
+- **First Diffusion**: First render of a diffuse sphere with hemispherical scattering.
+- **Shadow Acne**: Visualization of self-shadowing artifacts caused by floating-point rounding errors.
+- **Lambertian Reflection**: True Lambertian reflection using cosine-weighted hemispherical distribution.
+
+#### First Diffusion
+![First Diffusion](renders/09_diffuse_materials/01_first_diffusion/first_diffuse.png)
+
+#### Shadow Acne
+![Shadow Acne](renders/09_diffuse_materials/02_shadow_acne/shadow_acne.png)
+
+#### Lambertian Reflection
+![Lambertian Reflection](renders/09_diffuse_materials/03_lambertian/lambertian_reflection.png)
 
 ### 🟢 Anti-aliasing Comparison (Chapter 8 - Antialiasing)
 *MSAA anti-aliasing render showing smooth sphere boundaries.*

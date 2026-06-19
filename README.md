@@ -35,23 +35,23 @@ A high-performance, header-only CPU Ray Tracer written in C++ based on Peter Shi
 │   ├── color.h         # Color utilities and PPM formatting output
 │   ├── interval.h      # Min/max utility ranges for ray calculations
 │   └── rtweekend.h     # Common constants, utility functions, and random number generators
-├── renders/            # Folder containing pre-rendered outputs (.ppm and .png) grouped by topic
-│   ├── 01_background_sky/      # Gradient sky background
-│   ├── 02_sphere_normals/     # Surface normal visualization (before/after)
-│   ├── 03_diffuse_sphere/     # Diffuse materials
-│   │   ├── shadow_acne/       # Before/after shadow acne fix comparison
-│   │   ├── lambertian/        # Lambertian diffuse vs original diffuse comparison
-│   │   └── sphere_on_grass/   # Diffuse sphere on grass
-│   ├── 04_antialiasing/       # MSAA anti-aliasing comparison (before/after)
-│   ├── 05_metal_materials/    # Metallic reflections with fuzziness (before/after)
-│   ├── 06_glass_materials/    # Glass dielectrics
-│   │   ├── refraction/        # Glass refraction
-│   │   ├── total_internal_reflection/ # TIR comparison (before/after)
-│   │   └── hollow_glass_sphere/       # Hollow glass bubble primitive
-│   ├── 07_positionable_camera/# Camera positioning and custom field of view (vfov)
-│   ├── 08_defocus_blur/       # Simulated physical lens depth-of-field
-│   ├── 09_final_scene/        # Final complex scene render
-│   └── 10_miscellaneous/      # Original / other testing renders
+├── renders/            # Folder containing pre-rendered outputs (.ppm and .png) grouped by book chapters
+│   ├── 02_output_an_image/             # Hello World color gradient
+│   ├── 04_rays_simple_camera_background/# Blue-to-white sky gradient
+│   ├── 05_adding_a_sphere/             # Red sphere hit test
+│   ├── 06_surface_normals_multiple_objects/ # Normal vector coloring and multiple objects (sphere on grass)
+│   ├── 08_antialiasing/                 # Supersampled antialiased sphere
+│   ├── 09_diffuse_materials/            # Diffuse materials
+│   │   ├── shadow_acne/                # Before/after shadow acne fix comparison
+│   │   └── lambertian/                 # True Lambertian reflection rendering
+│   ├── 10_metal/                        # Metal reflection (before/after fuzziness)
+│   ├── 11_dielectrics/                  # Glass dielectrics
+│   │   ├── refraction/                 # Light refraction
+│   │   ├── total_internal_reflection/  # Total Internal Reflection (TIR)
+│   │   └── hollow_glass_sphere/        # Hollow glass bubble primitive
+│   ├── 12_positionable_camera/          # Positionable camera views (wide fov, custom position, zoom)
+│   ├── 13_defocus_blur/                 # Depth of field (defocus blur)
+│   └── 14_final_scene/                  # Final complex scene render
 └── bin/                # Target directory for compiled binaries
 ```
 
@@ -75,59 +75,52 @@ The main program redirects output directly to generate a PPM image file using `f
 ./bin/raytracer.exe
 ```
 
-This will output `final_scene.ppm` in the `renders/09_final_scene/` directory.
+This will output `final_scene.ppm` in the `renders/14_final_scene/` directory.
 
 ---
 
 ## 🖼️ Render Gallery (Milestones)
 
-This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development. Renders are organized inside their respective subconcept folders under the `renders/` directory:
+This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development. Renders are organized inside their respective chapter folders under the `renders/` directory:
 
-### 🌌 Final Scene
+### 🌌 Final Scene (Chapter 14)
 *Defocus blur, 1200x675, 500 samples per pixel, BVH node hierarchy.*
 *(Note: The raw PPM file was partially truncated; this preview displays the recovered portion).*
 
-![Final Scene](renders/09_final_scene/final_scene.png)
+![Final Scene](renders/14_final_scene/final_scene.png)
 
-### 📸 Defocus Blur
+### 📸 Defocus Blur (Chapter 13)
 *Camera depth-of-field focusing on three primary spheres.*
 
-![Defocus Blur](renders/08_defocus_blur/defocus_blur.png)
+![Defocus Blur](renders/13_defocus_blur/defocus_blur.png)
 
-### 💎 Glass Materials (Refraction & Total Internal Reflection)
+### 💎 Glass Materials (Chapter 11 - Dielectrics)
 Comparison of dielectric glass spheres.
 - **Glass Refraction**: Refraction of light using Snell's Law.
-- **Total Internal Reflection (TIR)**: Light reflection at critical angles (before vs after comparison).
+- **Total Internal Reflection (TIR)**: Light reflection at critical angles.
 - **Hollow Glass Sphere**: A hollow bubble nested inside another dielectric sphere.
 
 #### Glass Refraction
-![Glass Refraction](renders/06_glass_materials/refraction/glass_refraction.png)
+![Glass Refraction](renders/11_dielectrics/refraction/glass_refraction.png)
 
-#### Total Internal Reflection (Before vs. After)
-<p align="center">
-  <img src="renders/06_glass_materials/total_internal_reflection/before_TIR.png" width="48%" alt="Before TIR (Only Refraction)" />
-  <img src="renders/06_glass_materials/total_internal_reflection/after_TIR.png" width="48%" alt="After TIR (Total Reflection)" />
-</p>
+#### Total Internal Reflection (TIR)
+![Total Internal Reflection](renders/11_dielectrics/total_internal_reflection/after_TIR.png)
 
 #### Hollow Glass Sphere
-![Hollow Glass Sphere](renders/06_glass_materials/hollow_glass_sphere/hollow_glass_sphere.png)
+![Hollow Glass Sphere](renders/11_dielectrics/hollow_glass_sphere/hollow_glass_sphere.png)
 
-### 🪙 Metal Spheres & Surface Roughness (Before vs. After)
+### 🪙 Metal Spheres & Surface Roughness (Chapter 10 - Metal)
 *Metallic reflections showing the progress from pure specular reflection (Before Fuzz) to fuzzed specular reflection (After Fuzz).*
 
 <p align="center">
-  <img src="renders/05_metal_materials/before_fuzz.png" width="48%" alt="Before Fuzz (Pure specular)" />
-  <img src="renders/05_metal_materials/after_fuzz.png" width="48%" alt="After Fuzz (Fuzzy reflection)" />
+  <img src="renders/10_metal/before_fuzz.png" width="48%" alt="Before Fuzz (Pure specular)" />
+  <img src="renders/10_metal/after_fuzz.png" width="48%" alt="After Fuzz (Fuzzy reflection)" />
 </p>
 
-### 🟢 Anti-aliasing Comparison (Before vs. After)
-*Comparison showing the effect of multi-sample anti-aliasing (MSAA) on reducing jagged edges on the sphere border.*
-*(Note: To keep the repository clean and save space, we only keep a single raw `.ppm` file (`renders/04_antialiasing/after_antialiasing.ppm`) for this step, but keep both converted PNG views).*
+### 🟢 Anti-aliasing Comparison (Chapter 8 - Antialiasing)
+*MSAA anti-aliasing render showing smooth sphere boundaries.*
 
-<p align="center">
-  <img src="renders/04_antialiasing/before_antialiasing.png" width="48%" alt="Before Anti-aliasing (Jagged)" />
-  <img src="renders/04_antialiasing/after_antialiasing.png" width="48%" alt="After Anti-aliasing (Smooth)" />
-</p>
+![Anti-aliasing](renders/08_antialiasing/antialiasing.png)
 
 ---
 

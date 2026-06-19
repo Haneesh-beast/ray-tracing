@@ -83,27 +83,27 @@ def fix_and_convert_ppm(ppm_path, png_path):
         return False
 
 def convert_all():
-    ppm_dir = os.path.join("renders", "ppm")
-    png_dir = os.path.join("renders", "png")
-    
-    if not os.path.exists(ppm_dir):
-        print(f"Directory '{ppm_dir}' not found.")
+    renders_dir = "renders"
+    if not os.path.exists(renders_dir):
+        print(f"Directory '{renders_dir}' not found.")
         return
-        
-    os.makedirs(png_dir, exist_ok=True)
 
-    ppm_files = glob.glob(os.path.join(ppm_dir, "*.ppm"))
+    # Recursively find all .ppm files in renders/ directory and subdirectories
+    ppm_files = []
+    for root, dirs, files in os.walk(renders_dir):
+        for file in files:
+            if file.endswith('.ppm'):
+                ppm_files.append(os.path.join(root, file))
+                
     if not ppm_files:
-        print("No .ppm files found in the 'renders/ppm' directory.")
+        print("No .ppm files found in the 'renders' directory or its subfolders.")
         return
 
     print(f"Found {len(ppm_files)} PPM files. Starting conversion...")
     
     success_count = 0
     for ppm_path in ppm_files:
-        filename = os.path.basename(ppm_path)
-        png_filename = os.path.splitext(filename)[0] + ".png"
-        png_path = os.path.join(png_dir, png_filename)
+        png_path = os.path.splitext(ppm_path)[0] + ".png"
         
         # Check if PNG already exists and is newer than PPM
         if os.path.exists(png_path) and os.path.getmtime(png_path) > os.path.getmtime(ppm_path):

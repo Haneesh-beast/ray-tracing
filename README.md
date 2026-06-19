@@ -35,9 +35,17 @@ A high-performance, header-only CPU Ray Tracer written in C++ based on Peter Shi
 │   ├── color.h         # Color utilities and PPM formatting output
 │   ├── interval.h      # Min/max utility ranges for ray calculations
 │   └── rtweekend.h     # Common constants, utility functions, and random number generators
-├── renders/            # Folder containing all pre-rendered output images
-│   ├── ppm/            # Subfolder for raw, uncompressed C++ output images (.ppm)
-│   └── png/            # Subfolder for compressed, web-ready preview images (.png)
+├── renders/            # Folder containing pre-rendered outputs (.ppm and .png) grouped by topic
+│   ├── 01_background_sky/      # Gradient sky background
+│   ├── 02_sphere_normals/     # Hit test and surface normal visualization
+│   ├── 03_diffuse_sphere/     # Diffuse materials, shadow acne fixes, and grass sphere
+│   ├── 04_antialiasing/       # MSAA anti-aliasing comparison
+│   ├── 05_metal_materials/    # Metallic reflections with fuzziness
+│   ├── 06_glass_materials/    # Glass refraction and Total Internal Reflection (TIR)
+│   ├── 07_positionable_camera/# Camera positioning and custom field of view (vfov)
+│   ├── 08_defocus_blur/       # Simulated physical lens depth-of-field
+│   ├── 09_final_scene/        # Final complex scene render
+│   └── 10_miscellaneous/      # Original / other testing renders
 └── bin/                # Target directory for compiled binaries
 ```
 
@@ -61,53 +69,53 @@ The main program redirects output directly to generate a PPM image file using `f
 ./bin/raytracer.exe
 ```
 
-This will output `Final_scene.ppm` in the `renders/ppm/` directory.
+This will output `Final_scene.ppm` in the `renders/09_final_scene/` directory.
 
 ---
 
 ## 🖼️ Render Gallery (Milestones)
 
-This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development. The renders are organized inside the `renders/png/` directory:
+This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development. Each topic folder contains the raw `.ppm` file and its web-ready `.png` counterpart, along with "before" and "after" files for visual comparison:
 
 ### 🌌 Final Scene
 *Defocus blur, 1200x675, 500 samples per pixel, BVH node hierarchy.*
 *(Note: The raw PPM file was partially truncated; this preview displays the recovered portion).*
 
-![Final Scene](renders/png/Final_scene.png)
+![Final Scene](renders/09_final_scene/Final_scene.png)
 
 ### 📸 Defocus Blur
 *Camera depth-of-field focusing on three primary spheres.*
 
-![Defocus Blur](renders/png/Defocus_Blur.png)
+![Defocus Blur](renders/08_defocus_blur/Defocus_Blur.png)
 
 ### 💎 Refraction & Total Internal Reflection (TIR)
 *Dielectric glass spheres demonstrating physical refraction and reflection properties.*
 
 <p align="center">
-  <img src="renders/png/refraction.png" width="48%" alt="Refraction" />
-  <img src="renders/png/TIR.png" width="48%" alt="Total Internal Reflection" />
+  <img src="renders/06_glass_materials/refraction.png" width="48%" alt="Refraction" />
+  <img src="renders/06_glass_materials/TIR.png" width="48%" alt="Total Internal Reflection" />
 </p>
 
 ### 🫧 Hollow Glass Sphere
 *A hollow glass bubble rendered using a sphere with negative radius nested inside another dielectric sphere.*
 
-![Hollow Glass Sphere](renders/png/hollow_glass_sphere.png)
+![Hollow Glass Sphere](renders/06_glass_materials/hollow_glass_sphere.png)
 
 ### 🪙 Metal Spheres & Surface Roughness (Fuzz)
 *Reflective metallic spheres showing differing levels of surface roughness (fuzz).*
 
 <p align="center">
-  <img src="renders/png/Metals.png" width="48%" alt="Specular Metals" />
-  <img src="renders/png/fuzzed_Metals.png" width="48%" alt="Fuzzy Metals" />
+  <img src="renders/05_metal_materials/Metals.png" width="48%" alt="Specular Metals" />
+  <img src="renders/05_metal_materials/fuzzed_Metals.png" width="48%" alt="Fuzzy Metals" />
 </p>
 
 ### 🟢 Anti-aliasing Comparison (Before vs. After)
 *Comparison showing the effect of multi-sample anti-aliasing (MSAA) on reducing jagged edges on the sphere border.*
-*(Note: To keep the repository clean and save space, we only keep a single raw `.ppm` file (`renders/ppm/Antialiasing.ppm`) for this step, but keep both converted PNG views).*
+*(Note: To keep the repository clean and save space, we only keep a single raw `.ppm` file (`renders/04_antialiasing/Antialiasing.ppm`) for this step, but keep both converted PNG views).*
 
 <p align="center">
-  <img src="renders/png/first_diffuse_sphere.png" width="48%" alt="Before Anti-aliasing (Jagged)" />
-  <img src="renders/png/Antialiasing.png" width="48%" alt="After Anti-aliasing (Smooth)" />
+  <img src="renders/04_antialiasing/first_diffuse_sphere.png" width="48%" alt="Before Anti-aliasing (Jagged)" />
+  <img src="renders/04_antialiasing/Antialiasing.png" width="48%" alt="After Anti-aliasing (Smooth)" />
 </p>
 
 ---
@@ -117,8 +125,8 @@ This repository includes several pre-rendered visual milestones showing progress
 Since browsers and GitHub cannot natively display `.ppm` (Portable Pixmap) files, this repository includes a helper Python utility, [convert_ppm.py](file:///c:/Users/kondr/Desktop/ray_tracing/Week-2/convert_ppm.py).
 
 This script:
-1. Automatically scans the `renders/ppm/` directory for `.ppm` files.
-2. Converts them into standard `.png` images inside `renders/png/`.
+1. Automatically scans the entire `renders/` directory and its subfolders for `.ppm` files.
+2. Converts them into standard `.png` images in their respective directories.
 3. Automatically attempts to recover and pad truncated or interrupted renders (like `Final_scene.ppm`) with black pixels so they can still be viewed.
 4. Skips redundant conversions if the PNG file is already up to date.
 

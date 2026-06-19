@@ -37,11 +37,17 @@ A high-performance, header-only CPU Ray Tracer written in C++ based on Peter Shi
 │   └── rtweekend.h     # Common constants, utility functions, and random number generators
 ├── renders/            # Folder containing pre-rendered outputs (.ppm and .png) grouped by topic
 │   ├── 01_background_sky/      # Gradient sky background
-│   ├── 02_sphere_normals/     # Hit test and surface normal visualization
-│   ├── 03_diffuse_sphere/     # Diffuse materials, shadow acne fixes, and grass sphere
-│   ├── 04_antialiasing/       # MSAA anti-aliasing comparison
-│   ├── 05_metal_materials/    # Metallic reflections with fuzziness
-│   ├── 06_glass_materials/    # Glass refraction and Total Internal Reflection (TIR)
+│   ├── 02_sphere_normals/     # Surface normal visualization (before/after)
+│   ├── 03_diffuse_sphere/     # Diffuse materials
+│   │   ├── shadow_acne/       # Before/after shadow acne fix comparison
+│   │   ├── lambertian/        # Lambertian diffuse vs original diffuse comparison
+│   │   └── sphere_on_grass/   # Diffuse sphere on grass
+│   ├── 04_antialiasing/       # MSAA anti-aliasing comparison (before/after)
+│   ├── 05_metal_materials/    # Metallic reflections with fuzziness (before/after)
+│   ├── 06_glass_materials/    # Glass dielectrics
+│   │   ├── refraction/        # Glass refraction
+│   │   ├── total_internal_reflection/ # TIR comparison (before/after)
+│   │   └── hollow_glass_sphere/       # Hollow glass bubble primitive
 │   ├── 07_positionable_camera/# Camera positioning and custom field of view (vfov)
 │   ├── 08_defocus_blur/       # Simulated physical lens depth-of-field
 │   ├── 09_final_scene/        # Final complex scene render
@@ -69,53 +75,58 @@ The main program redirects output directly to generate a PPM image file using `f
 ./bin/raytracer.exe
 ```
 
-This will output `Final_scene.ppm` in the `renders/09_final_scene/` directory.
+This will output `final_scene.ppm` in the `renders/09_final_scene/` directory.
 
 ---
 
 ## 🖼️ Render Gallery (Milestones)
 
-This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development. Each topic folder contains the raw `.ppm` file and its web-ready `.png` counterpart, along with "before" and "after" files for visual comparison:
+This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development. Renders are organized inside their respective subconcept folders under the `renders/` directory:
 
 ### 🌌 Final Scene
 *Defocus blur, 1200x675, 500 samples per pixel, BVH node hierarchy.*
 *(Note: The raw PPM file was partially truncated; this preview displays the recovered portion).*
 
-![Final Scene](renders/09_final_scene/Final_scene.png)
+![Final Scene](renders/09_final_scene/final_scene.png)
 
 ### 📸 Defocus Blur
 *Camera depth-of-field focusing on three primary spheres.*
 
-![Defocus Blur](renders/08_defocus_blur/Defocus_Blur.png)
+![Defocus Blur](renders/08_defocus_blur/defocus_blur.png)
 
-### 💎 Refraction & Total Internal Reflection (TIR)
-*Dielectric glass spheres demonstrating physical refraction and reflection properties.*
+### 💎 Glass Materials (Refraction & Total Internal Reflection)
+Comparison of dielectric glass spheres.
+- **Glass Refraction**: Refraction of light using Snell's Law.
+- **Total Internal Reflection (TIR)**: Light reflection at critical angles (before vs after comparison).
+- **Hollow Glass Sphere**: A hollow bubble nested inside another dielectric sphere.
 
+#### Glass Refraction
+![Glass Refraction](renders/06_glass_materials/refraction/glass_refraction.png)
+
+#### Total Internal Reflection (Before vs. After)
 <p align="center">
-  <img src="renders/06_glass_materials/refraction.png" width="48%" alt="Refraction" />
-  <img src="renders/06_glass_materials/TIR.png" width="48%" alt="Total Internal Reflection" />
+  <img src="renders/06_glass_materials/total_internal_reflection/before_TIR.png" width="48%" alt="Before TIR (Only Refraction)" />
+  <img src="renders/06_glass_materials/total_internal_reflection/after_TIR.png" width="48%" alt="After TIR (Total Reflection)" />
 </p>
 
-### 🫧 Hollow Glass Sphere
-*A hollow glass bubble rendered using a sphere with negative radius nested inside another dielectric sphere.*
+#### Hollow Glass Sphere
+![Hollow Glass Sphere](renders/06_glass_materials/hollow_glass_sphere/hollow_glass_sphere.png)
 
-![Hollow Glass Sphere](renders/06_glass_materials/hollow_glass_sphere.png)
-
-### 🪙 Metal Spheres & Surface Roughness (Fuzz)
-*Reflective metallic spheres showing differing levels of surface roughness (fuzz).*
+### 🪙 Metal Spheres & Surface Roughness (Before vs. After)
+*Metallic reflections showing the progress from pure specular reflection (Before Fuzz) to fuzzed specular reflection (After Fuzz).*
 
 <p align="center">
-  <img src="renders/05_metal_materials/Metals.png" width="48%" alt="Specular Metals" />
-  <img src="renders/05_metal_materials/fuzzed_Metals.png" width="48%" alt="Fuzzy Metals" />
+  <img src="renders/05_metal_materials/before_fuzz.png" width="48%" alt="Before Fuzz (Pure specular)" />
+  <img src="renders/05_metal_materials/after_fuzz.png" width="48%" alt="After Fuzz (Fuzzy reflection)" />
 </p>
 
 ### 🟢 Anti-aliasing Comparison (Before vs. After)
 *Comparison showing the effect of multi-sample anti-aliasing (MSAA) on reducing jagged edges on the sphere border.*
-*(Note: To keep the repository clean and save space, we only keep a single raw `.ppm` file (`renders/04_antialiasing/Antialiasing.ppm`) for this step, but keep both converted PNG views).*
+*(Note: To keep the repository clean and save space, we only keep a single raw `.ppm` file (`renders/04_antialiasing/after_antialiasing.ppm`) for this step, but keep both converted PNG views).*
 
 <p align="center">
-  <img src="renders/04_antialiasing/first_diffuse_sphere.png" width="48%" alt="Before Anti-aliasing (Jagged)" />
-  <img src="renders/04_antialiasing/Antialiasing.png" width="48%" alt="After Anti-aliasing (Smooth)" />
+  <img src="renders/04_antialiasing/before_antialiasing.png" width="48%" alt="Before Anti-aliasing (Jagged)" />
+  <img src="renders/04_antialiasing/after_antialiasing.png" width="48%" alt="After Anti-aliasing (Smooth)" />
 </p>
 
 ---
@@ -126,8 +137,8 @@ Since browsers and GitHub cannot natively display `.ppm` (Portable Pixmap) files
 
 This script:
 1. Automatically scans the entire `renders/` directory and its subfolders for `.ppm` files.
-2. Converts them into standard `.png` images in their respective directories.
-3. Automatically attempts to recover and pad truncated or interrupted renders (like `Final_scene.ppm`) with black pixels so they can still be viewed.
+2. Converts them into standard `.png` images in their respective subdirectories.
+3. Automatically attempts to recover and pad truncated or interrupted renders (like `final_scene.ppm`) with black pixels so they can still be viewed.
 4. Skips redundant conversions if the PNG file is already up to date.
 
 ### Usage

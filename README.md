@@ -53,6 +53,9 @@ A high-performance, header-only CPU Ray Tracer written in C++ based on Peter Shi
 │   ├── 12_positionable_camera/          # Positionable camera views (wide fov, custom position, zoom)
 │   ├── 13_defocus_blur/                 # Depth of field (defocus blur)
 │   └── 14_final_scene/                  # Final complex scene render
+├── video/              # Folder containing final scene animation and its frames
+│   ├── final_scene_animation.mp4        # Compiled MP4 animation of the final scene
+│   └── frames/                          # Individual PPM frames (frame001.ppm to frame250.ppm)
 └── bin/                # Target directory for compiled binaries
 ```
 
@@ -88,6 +91,16 @@ This repository includes several pre-rendered visual milestones showing progress
 *Defocus blur, 1200x675, 500 samples per pixel, BVH node hierarchy.*
 
 ![Final Scene](renders/14_final_scene/final_scene.png)
+
+### 🎥 Final Scene Animation (Chapter 14)
+*An animated camera flythrough of the final scene, rendered as a 250-frame sequence.*
+
+You can view the compiled animation here: [final_scene_animation.mp4](video/final_scene_animation.mp4)
+
+To compile the animation from the individual frame files:
+```bash
+ffmpeg -framerate 25 -i video/frames/frame%03d.ppm -c:v libx264 -pix_fmt yuv420p video/final_scene_animation.mp4
+```
 
 ### 📸 Defocus Blur (Chapter 13)
 *Camera depth-of-field focusing on three primary spheres.*

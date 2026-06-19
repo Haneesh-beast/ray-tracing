@@ -11,7 +11,7 @@
 int main()
 {
 
-    freopen("Final_scene.ppm" , "w" , stdout);
+    freopen("renders/Final_scene.ppm" , "w" , stdout);
 
     // World 
 

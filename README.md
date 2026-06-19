@@ -21,19 +21,22 @@ A high-performance, header-only CPU Ray Tracer written in C++ based on Peter Shi
 ## 📂 Project Structure
 
 ```bash
-├── main.cpp            # Application entry point (sets up scene, camera, and triggers render)
-├── camera.h            # Camera class, MSAA sampling, viewport math, and render execution loop
-├── material.h          # Abstract material class and its derivatives (Lambertian, Metal, Dielectric)
-├── sphere.h            # Hittable spherical primitive
-├── hittable.h          # Base abstract class for interceptable objects
-├── hittable_list.h     # Container class for scene objects
-├── aabb.h              # Axis-Aligned Bounding Box (AABB) representation for BVH
-├── bvh.h               # BVH acceleration node tree
-├── vec3.h              # Core 3D math wrapper for coordinates, directions, and color operations
-├── ray.h               # Ray model representation (Origin + Direction * t)
-├── color.h             # Color utilities and PPM formatting output
-├── interval.h          # Min/max utility ranges for ray calculations
-└── rtweekend.h         # Common constants, utility functions, and random number generators
+├── src/                # Folder containing all C++ source and header files
+│   ├── main.cpp        # Application entry point (sets up scene, camera, and triggers render)
+│   ├── camera.h        # Camera class, MSAA sampling, viewport math, and render execution loop
+│   ├── material.h      # Abstract material class and its derivatives (Lambertian, Metal, Dielectric)
+│   ├── sphere.h        # Hittable spherical primitive
+│   ├── hittable.h      # Base abstract class for interceptable objects
+│   ├── hittable_list.h # Container class for scene objects
+│   ├── aabb.h          # Axis-Aligned Bounding Box (AABB) representation for BVH
+│   ├── bvh.h           # BVH acceleration node tree
+│   ├── vec3.h          # Core 3D math wrapper for coordinates, directions, and color operations
+│   ├── ray.h           # Ray model representation (Origin + Direction * t)
+│   ├── color.h         # Color utilities and PPM formatting output
+│   ├── interval.h      # Min/max utility ranges for ray calculations
+│   └── rtweekend.h     # Common constants, utility functions, and random number generators
+├── renders/            # Folder containing all pre-rendered PPM milestone images
+└── bin/                # Target directory for compiled binaries
 ```
 
 ---
@@ -46,28 +49,28 @@ This project is header-only and requires a C++ compiler supporting C++11 or high
 Compile the application with optimization flags (`-O3`) for fast performance:
 
 ```bash
-g++ -O3 main.cpp -o raytracer.exe
+g++ -O3 src/main.cpp -o bin/raytracer.exe
 ```
 
 ### Run
-The main program redirects output directly to generate a PPM image file using `freopen`. Simply execute the compiled binary:
+The main program redirects output directly to generate a PPM image file using `freopen`. Execute the compiled binary from the root directory:
 
 ```bash
-./raytracer.exe
+./bin/raytracer.exe
 ```
 
-This will output `Final_scene.ppm` in the root directory.
+This will output `Final_scene.ppm` in the `renders/` directory.
 
 ---
 
 ## 🖼️ Render Gallery (Milestones)
 
-This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development:
+This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development (located in the `renders/` directory):
 
-* **`Final_scene.ppm`**: The final output featuring a large collection of random glass, metal, and diffuse spheres on a grass ground, with depth-of-field defocus blur.
-* **`Defocus_Blur.ppm`**: Demonstrating physical camera lens effects (depth of field) focusing on three main spheres.
-* **`refraction.ppm` & `TIR.ppm`**: Showcasing dielectric materials, total internal reflection, and light refraction.
-* **`hollow_glass_sphere.ppm`**: A hollow glass bubble rendered using a sphere with negative radius nested inside another dielectric sphere.
-* **`Metals.ppm` & `fuzzed_Metals.ppm`**: Highlighting reflective metal materials with varying degrees of surface roughness (fuzz).
-* **`Antialiasing.ppm`**: Smooth render highlighting pixel MSAA supersampling.
-- Other intermediate test steps such as `blue_white.ppm`, `first_diffuse_sphere.ppm`, `vfov.ppm`, and camera positioning files.
+* **`renders/Final_scene.ppm`**: The final output featuring a large collection of random glass, metal, and diffuse spheres on a grass ground, with depth-of-field defocus blur.
+* **`renders/Defocus_Blur.ppm`**: Demonstrating physical camera lens effects (depth of field) focusing on three main spheres.
+* **`renders/refraction.ppm` & `renders/TIR.ppm`**: Showcasing dielectric materials, total internal reflection, and light refraction.
+* **`renders/hollow_glass_sphere.ppm`**: A hollow glass bubble rendered using a sphere with negative radius nested inside another dielectric sphere.
+* **`renders/Metals.ppm` & `renders/fuzzed_Metals.ppm`**: Highlighting reflective metal materials with varying degrees of surface roughness (fuzz).
+* **`renders/Antialiasing.ppm`**: Smooth render highlighting pixel MSAA supersampling.
+- Other intermediate test steps such as `renders/blue_white.ppm`, `renders/first_diffuse_sphere.ppm`, `renders/vfov.ppm`, and camera positioning files.

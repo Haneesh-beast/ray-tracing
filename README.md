@@ -65,12 +65,60 @@ This will output `Final_scene.ppm` in the `renders/` directory.
 
 ## 🖼️ Render Gallery (Milestones)
 
-This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development (located in the `renders/` directory):
+This repository includes several pre-rendered visual milestones showing progress through the ray tracer's development. The renders have been converted to PNG for web compatibility:
 
-* **`renders/Final_scene.ppm`**: The final output featuring a large collection of random glass, metal, and diffuse spheres on a grass ground, with depth-of-field defocus blur.
-* **`renders/Defocus_Blur.ppm`**: Demonstrating physical camera lens effects (depth of field) focusing on three main spheres.
-* **`renders/refraction.ppm` & `renders/TIR.ppm`**: Showcasing dielectric materials, total internal reflection, and light refraction.
-* **`renders/hollow_glass_sphere.ppm`**: A hollow glass bubble rendered using a sphere with negative radius nested inside another dielectric sphere.
-* **`renders/Metals.ppm` & `renders/fuzzed_Metals.ppm`**: Highlighting reflective metal materials with varying degrees of surface roughness (fuzz).
-* **`renders/Antialiasing.ppm`**: Smooth render highlighting pixel MSAA supersampling.
-- Other intermediate test steps such as `renders/blue_white.ppm`, `renders/first_diffuse_sphere.ppm`, `renders/vfov.ppm`, and camera positioning files.
+### 🌌 Final Scene
+*Defocus blur, 1200x675, 500 samples per pixel, BVH node hierarchy.*
+*(Note: The raw PPM file was partially truncated; this preview displays the recovered portion).*
+
+![Final Scene](renders/Final_scene.png)
+
+### 📸 Defocus Blur
+*Camera depth-of-field focusing on three primary spheres.*
+
+![Defocus Blur](renders/Defocus_Blur.png)
+
+### 💎 Refraction & Total Internal Reflection (TIR)
+*Dielectric glass spheres demonstrating physical refraction and reflection properties.*
+
+<p align="center">
+  <img src="renders/refraction.png" width="48%" alt="Refraction" />
+  <img src="renders/TIR.png" width="48%" alt="Total Internal Reflection" />
+</p>
+
+### 🫧 Hollow Glass Sphere
+*A hollow glass bubble rendered using a sphere with negative radius nested inside another dielectric sphere.*
+
+![Hollow Glass Sphere](renders/hollow_glass_sphere.png)
+
+### 🪙 Metal Spheres & Surface Roughness (Fuzz)
+*Reflective metallic spheres showing differing levels of surface roughness (fuzz).*
+
+<p align="center">
+  <img src="renders/Metals.png" width="48%" alt="Specular Metals" />
+  <img src="renders/fuzzed_Metals.png" width="48%" alt="Fuzzy Metals" />
+</p>
+
+### 🟢 Anti-aliasing Comparison
+*Supersampled render showing smooth sphere boundaries.*
+
+![Anti-aliasing](renders/Antialiasing.png)
+
+---
+
+## 🔄 PPM to PNG Image Converter
+
+Since browsers and GitHub cannot natively display `.ppm` (Portable Pixmap) files, this repository includes a helper Python utility, [convert_ppm.py](file:///c:/Users/kondr/Desktop/ray_tracing/Week-2/convert_ppm.py).
+
+This script:
+1. Automatically scans the `renders/` directory for `.ppm` files.
+2. Converts them into standard `.png` images.
+3. Automatically attempts to recover and pad truncated or interrupted renders (like `Final_scene.ppm`) with black pixels so they can still be viewed.
+4. Skips redundant conversions if the PNG file is already up to date.
+
+### Usage
+Ensure you have the Python `Pillow` library installed (`pip install Pillow`), then execute:
+
+```bash
+python convert_ppm.py
+```

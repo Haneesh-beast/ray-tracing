@@ -24,174 +24,111 @@ public :
     double defocus_angle = 0;  // Variation angle of rays through each pixel
     double focus_dist = 10;    // Distance from camera lookfrom point to plane of perfect focus
 
-    void render(const hittable& world )
+
+    // only bhv optimisation 
+
+    // void render(const hittable& world )
+    // {
+    //     initialize();
+
+    //     // Rendaring 
+
+    //     std::cout << "P3\n" <<  image_width << ' ' << image_height << "\n255\n";
+
+    //     for(int i = 0 ;i< image_height ; i++)
+    //     {
+    //         std::clog << "\rScanlines Remaining : " <<  image_height - i << ' ' << std::flush ; 
+    //         for(int j = 0 ; j < image_width ; j++)
+    //         {
+    //             color pixel_color = color(0,0,0); 
+    //             for(int sample = 0 ; sample < samples_per_pixel ; sample++)
+    //             {
+    //                 ray r = get_ray(i,j);
+    //                 pixel_color += ray_color(r ,max_depth , world );
+    //             }
+
+    //             write_color(std::cout , pixel_samples_scale*pixel_color);            
+    //         }
+    //     }
+    //     std::clog << "\rDone.                                            \n";
+    // }
+
+    // both the bvh and the multithreading 
+
+    void render(const hittable& world)
     {
         initialize();
 
-        // Rendaring 
+        std::vector<color> framebuffer(image_width * image_height);
 
-        std::cout << "P3\n" <<  image_width << ' ' << image_height << "\n255\n";
+        unsigned int num_threads = std::thread::hardware_concurrency();
+        if (num_threads == 0)
+            num_threads = 4;
 
-        for(int i = 0 ;i< image_height ; i++)
+        std::atomic<int> next_row(0);
+
+        auto render_rows = [&]()
         {
-            std::clog << "\rScanlines Remaining : " <<  image_height - i << ' ' << std::flush ; 
-            for(int j = 0 ; j < image_width ; j++)
+            while (true)
             {
-                color pixel_color = color(0,0,0); 
-                for(int sample = 0 ; sample < samples_per_pixel ; sample++)
+                int i = next_row++;
+
+                if (i >= image_height)
+                    break;
+
+                for (int j = 0; j < image_width; j++)
                 {
-                    ray r = get_ray(i,j);
-                    pixel_color += ray_color(r ,max_depth , world );
+                    color pixel_color(0, 0, 0);
+
+                    for (int sample = 0; sample < samples_per_pixel; sample++)
+                    {
+                        ray r = get_ray(i, j);
+                        pixel_color += ray_color(r, max_depth, world);
+                    }
+
+                    framebuffer[i * image_width + j] =
+                        pixel_samples_scale * pixel_color;
                 }
 
-                write_color(std::cout , pixel_samples_scale*pixel_color);            
+                int remaining = image_height - next_row;
+                if (remaining < 0) remaining = 0;
+                std::clog << "\rRows Remaining : "
+                        << remaining
+                        << "    "
+                        << std::flush;
+            }
+        };
+
+        std::vector<std::thread> threads;
+
+        for (unsigned int t = 0; t < num_threads; t++)
+        {
+            threads.emplace_back(render_rows);
+        }
+
+        for (auto& th : threads)
+        {
+            th.join();
+        }
+
+        std::cout << "P3\n"
+                << image_width << ' '
+                << image_height
+                << "\n255\n";
+
+        for (int i = 0; i < image_height; i++)
+        {
+            for (int j = 0; j < image_width; j++)
+            {
+                write_color(
+                    std::cout,
+                    framebuffer[i * image_width + j]
+                );
             }
         }
-        std::clog << "\rDone.                                            \n";
+
+        std::clog << "\rDone.                            \n";
     }
-
-
-    // void render(const hittable& world)
-    // {
-    //     initialize();
-
-    //     std::vector<color> framebuffer(image_width * image_height);
-
-    //     unsigned int num_threads = std::thread::hardware_concurrency();
-    //     if (num_threads == 0) num_threads = 4;
-    //     int rows_per_thread = image_height / num_threads;
-
-    //     auto render_rows = [&](int start_row, int end_row)
-    //     {
-    //         for (int i = start_row; i < end_row; i++)
-    //         {
-    //             if (start_row == (num_threads - 1) * rows_per_thread)
-    //             {
-    //                 std::clog << "\rLast thread rows remaining: "
-    //                         << (end_row - i)
-    //                         << "   "
-    //                         << std::flush;
-    //             }
-
-    //             for (int j = 0; j < image_width; j++)
-    //             {
-    //                 color pixel_color(0, 0, 0);
-
-    //                 for (int sample = 0; sample < samples_per_pixel; sample++)
-    //                 {
-    //                     ray r = get_ray(i, j);
-    //                     pixel_color += ray_color(r, max_depth, world);
-    //                 }
-
-    //                 framebuffer[i * image_width + j] =
-    //                     pixel_samples_scale * pixel_color;
-    //             }
-    //         }
-    //     };
-
-    //     std::vector<std::thread> threads;
-
-    //     // int rows_per_thread = image_height / num_threads;
-
-    //     for (unsigned int t = 0; t < num_threads; t++)
-    //     {
-    //         int start_row = t * rows_per_thread;
-    //         int end_row = (t == num_threads - 1)
-    //                         ? image_height
-    //                         : start_row + rows_per_thread;
-
-    //         threads.emplace_back(render_rows, start_row, end_row);
-    //     }
-
-    //     for (auto& th : threads)
-    //         th.join();
-
-    //     std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
-
-    //     for (int i = 0; i < image_height; i++)
-    //     {
-    //         for (int j = 0; j < image_width; j++)
-    //         {
-    //             write_color(std::cout,
-    //                         framebuffer[i * image_width + j]);
-    //         }
-    //     }
-
-    //     std::clog << "Done.\n";
-    // }
-
-    // void render(const hittable& world)
-    // {
-    //     initialize();
-
-    //     std::vector<color> framebuffer(image_width * image_height);
-
-    //     unsigned int num_threads = std::thread::hardware_concurrency();
-    //     if (num_threads == 0)
-    //         num_threads = 4;
-
-    //     std::atomic<int> next_row(0);
-
-    //     auto render_rows = [&]()
-    //     {
-    //         while (true)
-    //         {
-    //             int i = next_row++;
-
-    //             if (i >= image_height)
-    //                 break;
-
-    //             for (int j = 0; j < image_width; j++)
-    //             {
-    //                 color pixel_color(0, 0, 0);
-
-    //                 for (int sample = 0; sample < samples_per_pixel; sample++)
-    //                 {
-    //                     ray r = get_ray(i, j);
-    //                     pixel_color += ray_color(r, max_depth, world);
-    //                 }
-
-    //                 framebuffer[i * image_width + j] =
-    //                     pixel_samples_scale * pixel_color;
-    //             }
-
-    //             std::clog << "\rRows Remaining : "
-    //                     << (image_height - next_row)
-    //                     << "    "
-    //                     << std::flush;
-    //         }
-    //     };
-
-    //     std::vector<std::thread> threads;
-
-    //     for (unsigned int t = 0; t < num_threads; t++)
-    //     {
-    //         threads.emplace_back(render_rows);
-    //     }
-
-    //     for (auto& th : threads)
-    //     {
-    //         th.join();
-    //     }
-
-    //     std::cout << "P3\n"
-    //             << image_width << ' '
-    //             << image_height
-    //             << "\n255\n";
-
-    //     for (int i = 0; i < image_height; i++)
-    //     {
-    //         for (int j = 0; j < image_width; j++)
-    //         {
-    //             write_color(
-    //                 std::cout,
-    //                 framebuffer[i * image_width + j]
-    //             );
-    //         }
-    //     }
-
-    //     std::clog << "\rDone.                            \n";
-    // }
 
 
 private:

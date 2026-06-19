@@ -13,7 +13,7 @@ int main()
 
     freopen("renders/14_final_scene/final_scene.ppm" , "w" , stdout);
 
-    // World 
+    // World
 
     hittable_list world;
 
